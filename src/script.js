@@ -28,7 +28,7 @@ function onClickButton() {
 
 // 決済音再生
 function playSuicaSound() {
-    const music = new Audio("sound/suica.mp3");
+    const music = new Audio("src/sound/suica.mp3");
     music.play();
 }
 
@@ -43,11 +43,10 @@ function startMouseStalking() {
 
 // カードリーダー動作
 function moveCardReader() {
-    x = Math.random() * 400
-    y = Math.random() * 200
-    reader.style.left = 0;
-    reader.style.transform =
-        "translate(" + x + "%, " + -y + "%)";
+    x = Math.random() * 100
+    y = Math.random() * 100
+    reader.style.left = `calc(${x}% - 200px)`;
+    reader.style.top = `calc(${y}% - 200px)`;
 }
 
 // 決済開始
