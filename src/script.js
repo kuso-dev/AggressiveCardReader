@@ -154,7 +154,6 @@ function showOverlay() {
 
 // 重なり判定
 function isOverlap(p1, p2) {
-    console.log(p1, p2);
     return ((Math.max(p1.lb.x, p2.lb.x) < Math.min(p1.rt.x, p2.rt.x))
         && Math.min(p1.lb.y, p2.lb.y) > (Math.max(p1.rt.y, p2.rt.y)))
 }
