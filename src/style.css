@@ -48,8 +48,29 @@
     align-items: center;
 }
 
+.side-menu {
+    border-left: 1px solid gray;
+    padding: 12px;
+}
+
+.menu {
+    margin-bottom: 12px;
+}
+
 .mon {
     max-width: 128px;
+}
+
+.restart-button {
+    pointer-events: auto;
+    background: gray;
+    padding: 24px;
+    border-radius: 12px;
+    position: absolute;
+    bottom: 32px;
+    left: 32px;
+    font-size: 32px;
+    line-height: 32px;
 }
 
 .button {
@@ -58,4 +79,14 @@
     min-height: 24px;
     min-width: 72px;
     border-radius: 12px;
+}
+
+body {
+    display: flex;
+}
+
+main {
+    width: 100%;
+    height: 100vh;
+    position: relative;
 }

@@ -17,7 +17,8 @@
 <body>
     <main>
         <div id="overlay">
-            死
+            <p>死</p>
+            <button class="restart-button" onclick="onClickReStartButton()">回生</button>
         </div>
         <h1 id="headline">モンエナ飲みたいか？</h1>
         <div class="flex-column">
@@ -27,6 +28,28 @@
         <img id="suica" src="src/img/suica.png" />
         <img id="reader" src="src/img/card_reader.png">
     </main>
+    <div class="side-menu">
+        <div class="menu">
+            <label for="balance">初期残高</label>
+            <select id="balance" name="balance" onchange="onSelectBalance(this.options[this.selectedIndex].value)">
+                <option value="200">¥200</option>
+                <option value="20000">¥20000</option>
+                <option value="21030000000000">¥21兆300億</option>
+            </select>
+        </div>
+        <div class="menu">
+            <p>現残高</p>
+            <p id="current-balance">¥200</p>
+        </div>
+        <div class="menu">
+            <label for="mode">姿勢</label>
+            <select id="mode" name="mode" onchange="onSelectCardReaderMode(this.options[this.selectedIndex].value)">
+                <option value="aggressive">Aggressive</option>
+                <option value="passive">Passive</option>
+                <option value="insane">Insane</option>
+            </select>
+        </div>
+    </div>
 </body>
 
 </html>

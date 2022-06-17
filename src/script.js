@@ -6,15 +6,20 @@ var settleTimer;
 var observingTimer;
 // 回避用タイマー
 var escapingTimer;
+// 残高
+var balance = 200;
+
+var cardReaderMode = {
+    interval: 100
+}
 
 const suica = document.getElementById("suica");
 const reader = document.getElementById("reader");
 const overlay = document.getElementById("overlay");
 
+const currentBalance = document.getElementById("current-balance");
+
 function onClickButton() {
-    if (escapingTimer) {
-        location.reload()
-    }
     if (settleTimer || observingTimer) return
 
     if ("speechSynthesis" in window) {
@@ -26,11 +31,38 @@ function onClickButton() {
     }
 }
 
+function onSelectBalance(value) {
+    balance = parseFloat(value);
+    setCurrentBalance(value)
+}
+
+function onSelectCardReaderMode(value) {
+    switch (value) {
+        case 'aggressive':
+            cardReaderMode.interval = 500;
+            break
+        case 'passive':
+            cardReaderMode.interval = 10000000;
+            break
+        case 'insane':
+            cardReaderMode.interval = 10;
+    }
+}
+
+function onClickReStartButton() {
+    location.reload()
+}
+
 // 決済音再生
 function playSuicaSound() {
     const music = new Audio("src/sound/suica.mp3");
     music.play();
 }
+
+function setCurrentBalance(value) {
+    currentBalance.textContent = `¥${value}`
+}
+
 
 // マウスカーソル追従
 function startMouseStalking() {
@@ -67,10 +99,14 @@ function startObservingTimer() {
         const readerRect = new Rectangle(reader.getBoundingClientRect())
         const suicaRect = new Rectangle(suica.getBoundingClientRect())
         if (isOverlap(suicaRect, readerRect)) {
+            balance -= 200;
+            setCurrentBalance(balance)
             playSuicaSound();
             clearInterval(settleTimer);
             clearInterval(observingTimer);
-            setInterval(startEscapingTimer(), 10000);
+            setTimeout(() => {
+                setInterval(startEscapingTimer(), 10000);
+            }, 1000)
         }
     }, 100);
 }
@@ -85,15 +121,19 @@ function startEscapingTimer() {
     }
     speech()
     escapingTimer = setInterval(() => {
-        moveCardReader()
         const readerRect = new Rectangle(reader.getBoundingClientRect())
         const suicaRect = new Rectangle(suica.getBoundingClientRect())
         if (isOverlap(suicaRect, readerRect)) {
             playSuicaSound();
-            clearInterval(escapingTimer);
-            showOverlay();
+            balance -= 200;
+            setCurrentBalance(balance)
+            if (balance < 0) {
+                clearInterval(escapingTimer);
+                showOverlay();
+            }
         }
-    }, 500);
+    }, 100);
+    setInterval(moveCardReader, cardReaderMode.interval);
 }
 
 // ゲームオーバー
