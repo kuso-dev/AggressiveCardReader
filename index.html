@@ -6,9 +6,11 @@
     <title>Aggressive Card Reader</title>
     <meta name="description" content="攻めの姿勢" />
     <link rel="stylesheet" type="text/css" href="https://kuso-dev.github.io/AggressiveCardReader/src/style.css">
+    <!-- <link rel="stylesheet" type="text/css" href="src/style.css"> -->
     <!-- Reset CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/destyle.css@1.0.15/destyle.css" />
     <script src="https://kuso-dev.github.io/AggressiveCardReader/src/script.js" async></script>
+    <!-- <script src="src/script.js" async></script> -->
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Reggae+One&display=swap");
     </style>
@@ -19,6 +21,7 @@
         <div id="overlay">
             <p>死</p>
             <button class="restart-button" onclick="onClickReStartButton()">回生</button>
+            <span id="score" >ホゲホゲ</span>
         </div>
         <h1 id="headline">モンエナ飲みたいか？</h1>
         <div class="flex-column">
@@ -28,7 +31,7 @@
         <img id="suica" src="src/img/suica.png" />
         <img id="reader" src="src/img/card_reader.png">
     </main>
-    <div class="side-menu">
+    <div id="side-menu">
         <div class="menu">
             <label for="balance">初期残高</label>
             <select id="balance" name="balance" onchange="onSelectBalance(this.options[this.selectedIndex].value)">
@@ -42,12 +45,16 @@
             <p id="current-balance">¥200</p>
         </div>
         <div class="menu">
-            <label for="mode">姿勢</label>
+            <label for="mode">決済姿勢</label>
             <select id="mode" name="mode" onchange="onSelectCardReaderMode(this.options[this.selectedIndex].value)">
                 <option value="aggressive">Aggressive</option>
                 <option value="passive">Passive</option>
                 <option value="insane">Insane</option>
             </select>
+        </div>
+        <div class="menu">
+            <p>生存期間</p>
+            <p id="survive">0.0秒</p>
         </div>
     </div>
 </body>

@@ -1,3 +1,16 @@
+const MODE_AGGRESSIVE = 500
+const MODE_PASSIVE = 10000000
+const MODE_INSANE = 10
+
+const suica = document.getElementById("suica");
+const reader = document.getElementById("reader");
+const sideMenu = document.getElementById("side-menu");
+const overlay = document.getElementById("overlay");
+
+const currentBalance = document.getElementById("current-balance");
+const surviveTime = document.getElementById("survive");
+const score = document.getElementById("score");
+
 // SUICA決済フラグ
 var isSettled = false;
 // 決済音声用タイマー
@@ -8,16 +21,13 @@ var observingTimer;
 var escapingTimer;
 // 残高
 var balance = 200;
+// 生存期間
+var survive = 0;
 
 var cardReaderMode = {
-    interval: 100
+    interval: MODE_AGGRESSIVE
 }
 
-const suica = document.getElementById("suica");
-const reader = document.getElementById("reader");
-const overlay = document.getElementById("overlay");
-
-const currentBalance = document.getElementById("current-balance");
 
 function onClickButton() {
     if (settleTimer || observingTimer) return
@@ -39,13 +49,13 @@ function onSelectBalance(value) {
 function onSelectCardReaderMode(value) {
     switch (value) {
         case 'aggressive':
-            cardReaderMode.interval = 500;
+            cardReaderMode.interval = MODE_AGGRESSIVE;
             break
         case 'passive':
-            cardReaderMode.interval = 10000000;
+            cardReaderMode.interval = MODE_PASSIVE;
             break
         case 'insane':
-            cardReaderMode.interval = 10;
+            cardReaderMode.interval = MODE_INSANE;
     }
 }
 
@@ -63,11 +73,35 @@ function setCurrentBalance(value) {
     currentBalance.textContent = `¥${value}`
 }
 
+function setSurviveTime(value) {
+    surviveTime.textContent = `${value / 1000}秒`
+}
+
+function setScore() {
+    switch (cardReaderMode.interval) {
+        case MODE_PASSIVE:
+            score.textContent = '水出し麦茶級'
+            break
+        case MODE_AGGRESSIVE:
+            score.textContent = '水出し麦茶級'
+            break
+        case MODE_INSANE:
+            score.textContent = '水出し麦茶級'
+            break
+    }
+}
+
 
 // マウスカーソル追従
 function startMouseStalking() {
+    suica.style.opacity = 1;
     document.addEventListener("mousemove", (e) => {
-        suica.style.opacity = 1;
+        const suicaRect = new Rectangle(suica.getBoundingClientRect())
+        const sideMenuRect = new Rectangle(sideMenu.getBoundingClientRect())
+        if (isOverlap(suicaRect, sideMenuRect)) {
+            suica.style.transform = "translate(50%, 50%)";
+            return
+        }
         suica.style.transform =
             "translate(" + e.clientX + "px, " + e.clientY + "px)";
     });
@@ -129,8 +163,12 @@ function startEscapingTimer() {
             setCurrentBalance(balance)
             if (balance < 0) {
                 clearInterval(escapingTimer);
+                setScore()
                 showOverlay();
             }
+        } else {
+            survive += 100;
+            setSurviveTime(survive);
         }
     }, 100);
     setInterval(moveCardReader, cardReaderMode.interval);
